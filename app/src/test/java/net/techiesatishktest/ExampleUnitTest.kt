@@ -1,4 +1,4 @@
-package net.simplifiedcoding
+package net.techiesatishktest
 
 import org.junit.Test
 
