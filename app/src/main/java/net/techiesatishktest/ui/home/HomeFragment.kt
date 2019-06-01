@@ -11,25 +11,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.fragment_home.*
 import net.techiesatishktest.R
-
-
+import net.techiesatishktest.db.entity.Codes
+import java.sql.Timestamp
 
 
 class HomeFragment : Fragment() {
 
     val REQUEST_IMAGE_CAPTURE = 1
-
+    private lateinit var mViewModel: HomeViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        mViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val intents= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intents, REQUEST_IMAGE_CAPTURE )
     }
@@ -72,34 +74,16 @@ class HomeFragment : Fragment() {
             val displayValue = barcode.displayValue
             val msg = displayValue?.let{ it }?:"Undefined"
             updateLabel("Barcode:$msg")
-//            val bounds = barcode.boundingBox
-//            val corners = barcode.cornerPoints
-
-//            val rawValue = barcode.rawValue
-//            val valueType = barcode.valueType
-//
-//            when (valueType) {
-//                FirebaseVisionBarcode.TYPE_WIFI -> {
-//                    val ssid = barcode.getWifi()!!.getSsid()
-//                    val password = barcode.getWifi()!!.getPassword()
-//                    val type = barcode.getWifi()!!.getEncryptionType()
-//                }
-//                FirebaseVisionBarcode.TYPE_URL -> {
-//                    val title = barcode.getUrl()!!.getTitle()
-//                    val url = barcode.getUrl()!!.getUrl()
-//                }
-//                FirebaseVisionBarcode.TYPE_UNKNOWN ->{
-//
-//                    Log.d("TEXTRECOG","UNKNOWN BARCODE")
-//                }
-//            }
         }
 
     }
 
     private fun updateLabel(message: String){
         tv_decode.setText(message)
-        Toast.makeText(activity,message,Toast.LENGTH_SHORT).show()
+//        val time =Calendar.getInstance().time.toString("yyyy/MM/dd HH:mm:ss")
+        Toast.makeText(activity,message+" "+ Timestamp(System.currentTimeMillis()) ,Toast.LENGTH_SHORT).show()
+        mViewModel.insert(Codes(message,Timestamp(System.currentTimeMillis()).toString()))
+
     }
 
 

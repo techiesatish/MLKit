@@ -21,10 +21,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 
-private const val Camera_Permission = 1
+private const val Request_Permission = 1
+private const val Storage_Permission = 2
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
+    private var permission= arrayOf(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,17 +39,12 @@ class MainActivity : AppCompatActivity() {
         //Setting up the action bar
         NavigationUI.setupActionBarWithNavController(this, navController)
 
-        if (!hasLocationPermission()) {
+        if (!hasPermission()) {
             requestCameraPermission()
         }
 
 
     }
-
-    //Setting Up the back button
-//    override fun onSupportNavigateUp(): Boolean {
-//        return NavigationUI.navigateUp(navController, null)
-//    }
 
 
 
@@ -58,14 +56,13 @@ class MainActivity : AppCompatActivity() {
     private fun requestCameraPermission() {
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(Manifest.permission.CAMERA),
+            arrayOf(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE),
             Camera_Permission
         )
     }
 
-    private fun hasLocationPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(this,
-            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+    private fun hasPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onRequestPermissionsResult(
@@ -80,12 +77,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please, set camera permission from settings", Toast.LENGTH_LONG).show()
         }
     }
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        for (fragment in supportFragmentManager.fragments) {
-//            fragment.onActivityResult(requestCode, resultCode, data)
-//        }
-//    }
 
 
 }
