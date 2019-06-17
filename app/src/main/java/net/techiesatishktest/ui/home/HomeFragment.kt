@@ -2,6 +2,7 @@ package net.techiesatishktest.ui.home
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -25,15 +26,20 @@ class HomeFragment : Fragment() {
 
     val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var mViewModel: HomeViewModel
+    private lateinit var contexts: Context
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        contexts=this.context!!
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val intents= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intents, REQUEST_IMAGE_CAPTURE )
+        tv_decode.setOnClickListener {
+
+            val intents= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intents, REQUEST_IMAGE_CAPTURE )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
