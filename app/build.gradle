@@ -11,7 +11,11 @@ android {
         applicationId "net.techiesatishktest"
         minSdkVersion 15
         targetSdkVersion 28
+<<<<<<< HEAD
         versionCode 2
+=======
+        versionCode 1
+>>>>>>> satish
         versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
